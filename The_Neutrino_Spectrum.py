@@ -1,24 +1,14 @@
-"""Draw the Grand Unified Neutrino Spectrum at Earth."""
+"""Draw the Grand Unified Neutrino Spectrum at Earth: model plus measurements."""
 
 from PlotFuncs import TheNuSpectrum, MySaveFig
 
-# Initialize the plot class
 plot = TheNuSpectrum()
-
-# Set up the figure and axes
 fig, ax = plot.FigSetup()
 
 # The GUNS model components of arXiv:1910.11878
-plot.relic_neutrinos(ax)
-plot.bbn_neutrinos(ax)
-plot.solar_neutrinos(ax)
-plot.terrestrial_neutrinos(ax)
-plot.supernova_neutrinos(ax)
-plot.atmospheric_neutrinos(ax)
-plot.astrophysical_neutrinos(ax)
-plot.cosmogenic_neutrinos(ax)
+plot.model(ax)
 
-# Measurements from Borexino, SNO, KamLAND, IceCube and KM3NeT
+# Measurements from Borexino, SNO, KamLAND, Super-K, IceCube and KM3NeT
 plot.data(ax)
 
 # Diagonal guides for the integral rate through unit area
@@ -28,5 +18,4 @@ plot.iso_rate_lines(ax)
 plot.annotate(ax)
 plot.experiment_legend(ax)
 
-# Save the figure
 MySaveFig(fig, 'figures/The_Neutrino_Spectrum', pngsave=True)

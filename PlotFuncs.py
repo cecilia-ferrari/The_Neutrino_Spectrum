@@ -9,6 +9,12 @@ The_CR_Spectrum); the physics content follows
 
 Everything is drawn from the plot-ready tables in ``data/output``, produced by
 the scripts in ``data/``.
+
+Three figures are built on this class:
+
+    The_Neutrino_Spectrum.py           model + measurements  (the GUNS axes)
+    The_Multimessenger_Spectrum.py     the above + cosmic rays (wider axes)
+    The_Measured_Neutrino_Spectrum.py  measurements only     (the GUNS axes)
 """
 
 import platform
@@ -43,8 +49,15 @@ class TheNuSpectrum:
 
     # Axis ranges of Fig. 1 of arXiv:1910.11878, read off the `Produce-your-GUNS`
     # Mathematica notebook shipped as ancillary material with the paper.
-    E_MIN, E_MAX = 1.75e-7, 8.4e18          # eV
-    PHI_MIN, PHI_MAX = 1e-36, 1e18          # eV^-1 cm^-2 s^-1
+    GUNS_E_RANGE = (1.75e-7, 8.4e18)        # eV
+    GUNS_PHI_RANGE = (1e-36, 1e18)          # eV^-1 cm^-2 s^-1
+
+    # Widened just enough to hold the cosmic-ray spectrum as well, which reaches
+    # 2.2e20 eV and 8.6e-41 eV^-1 cm^-2 s^-1.
+    MULTIMESSENGER_E_RANGE = (1.75e-7, 1e21)
+    MULTIMESSENGER_PHI_RANGE = (1e-42, 1e18)
+
+    FIGSIZE = {'guns': (16.0, 12.5), 'multimessenger': (17.5, 14.0)}
 
     EV_TO_JOULE = 1.602176634e-19
 
@@ -72,6 +85,24 @@ class TheNuSpectrum:
         'cosmogenic': '#5A5A5A',
     }
 
+    # Colours of the cosmic-ray species, kept in a separate dark/earthy family so
+    # that the neutrinos stay the subject of the figure.
+    cr_colors = {
+        'allparticle': '#2B2B2B',
+        'protons': '#8C510A',
+        'leptons': '#BF812D',
+    }
+
+    # Colours of the experiments providing measured neutrino points.
+    experiments = {
+        'Borexino': '#F5A400',
+        'SNO': '#00A651',
+        'KamLAND': '#FF3DBE',
+        'Super-K': '#D62728',
+        'IceCube': '#8A2BE2',
+        'KM3NeT': '#141E3C',
+    }
+
     # Year of the measurement shown for each experiment, for the legend.
     experiment_years = {
         'Borexino': '2018--2023',
@@ -82,14 +113,11 @@ class TheNuSpectrum:
         'KM3NeT': '2025',
     }
 
-    # Colours of the experiments providing measured points.
-    experiments = {
-        'Borexino': '#F5A400',
-        'SNO': '#00A651',
-        'KamLAND': '#FF3DBE',
-        'Super-K': '#D62728',
-        'IceCube': '#8A2BE2',
-        'KM3NeT': '#141E3C',
+    # Where one colour carries several marker shapes, spell them out under the
+    # entry: (marker, label) pairs, drawn left to right.
+    experiment_markers = {
+        'Super-K': [('o', r'$\nu_e$'), ('s', r'$\nu_\mu$')],
+        'IceCube': [('^', r'atm.'), ('o', r'astro.')],
     }
 
     # Cosmetic truncation of the curves that end on a sharp kinematic edge: the
@@ -105,35 +133,54 @@ class TheNuSpectrum:
         'Cosmogenic_Fe_flux.txt': 1e-38,
     }
 
-    def __init__(self):
+    def __init__(self, axes='guns'):
         self.datadir = DATA_OUTPUT_DIR
+        self.axes_kind = axes
+        if axes == 'multimessenger':
+            self.E_MIN, self.E_MAX = self.MULTIMESSENGER_E_RANGE
+            self.PHI_MIN, self.PHI_MAX = self.MULTIMESSENGER_PHI_RANGE
+        else:
+            self.E_MIN, self.E_MAX = self.GUNS_E_RANGE
+            self.PHI_MIN, self.PHI_MAX = self.GUNS_PHI_RANGE
 
     # ------------------------------------------------------------------ setup
 
     def FigSetup(self, shape='Rectangular'):
-        figsize = (22.0, 8.0) if shape == 'Wide' else (16.0, 12.5)
+        figsize = self.FIGSIZE.get(self.axes_kind, self.FIGSIZE['guns'])
+        if shape == 'Wide':
+            figsize = (figsize[0] * 1.3, figsize[1] * 0.6)
         fig, ax = plt.subplots(figsize=figsize)
         self.SetAxes(ax)
         return fig, ax
+
+    @staticmethod
+    def _decade_ticks(lo, hi, step):
+        """Ticks every `step` decades, aligned on multiples of `step`."""
+        first = step * math_ceil(np.log10(lo) / step)
+        last = step * math_floor(np.log10(hi) / step)
+        return 10.0 ** np.arange(first, last + 1, step)
 
     def SetAxes(self, ax):
         ax.minorticks_off()
         ax.set_xscale('log')
         ax.set_xlim([self.E_MIN, self.E_MAX])
-        ax.set_xticks(np.logspace(-6, 18, 13))
-        ax.set_xlabel(r'Neutrino energy [eV]')
+        ax.set_xticks(self._decade_ticks(self.E_MIN, self.E_MAX, 2))
+        ax.set_xlabel(r'Neutrino energy [eV]' if self.axes_kind != 'multimessenger'
+                      else r'Energy [eV]')
 
         ax.set_yscale('log')
         ax.set_ylim([self.PHI_MIN, self.PHI_MAX])
-        ax.set_yticks(np.logspace(-36, 18, 10))
-        ax.set_ylabel(r'Neutrino flux [eV$^{-1}$ cm$^{-2}$ s$^{-1}$]')
+        ax.set_yticks(self._decade_ticks(self.PHI_MIN, self.PHI_MAX, 6))
+        ylabel = ('Flux' if self.axes_kind == 'multimessenger' else 'Neutrino flux')
+        ax.set_ylabel(ylabel + r' [eV$^{-1}$ cm$^{-2}$ s$^{-1}$]')
 
         ax2 = ax.twiny()
         ax2.minorticks_off()
         ax2.set_xscale('log')
-        ax2.set_xlim([self.E_MIN * self.EV_TO_JOULE, self.E_MAX * self.EV_TO_JOULE])
-        ax2.set_xticks(np.logspace(-25, -1, 13))
-        ax2.set_xlabel(r'Neutrino energy [J]', color='tab:blue', labelpad=16)
+        j_lo, j_hi = self.E_MIN * self.EV_TO_JOULE, self.E_MAX * self.EV_TO_JOULE
+        ax2.set_xlim([j_lo, j_hi])
+        ax2.set_xticks(self._decade_ticks(j_lo, j_hi, 2))
+        ax2.set_xlabel(r'Energy [J]', color='tab:blue', labelpad=16)
         ax2.tick_params(axis='x', colors='tab:blue')
 
     # ------------------------------------------------------------- data input
@@ -187,7 +234,7 @@ class TheNuSpectrum:
                     color=color, markeredgecolor=color, markerfacecolor='white',
                     markeredgewidth=2.0, elinewidth=2.0, capsize=4, zorder=zorder)
 
-    def plot_points(self, ax, filename, color, zorder=1, marker='o'):
+    def plot_points(self, ax, filename, color, zorder=1, marker='o', ms=8):
         """Differential measurements; bins with a null upper error are upper limits."""
         E, dElo, dEup, phi, dlo, dup = self.load(filename)[:6]
 
@@ -195,14 +242,14 @@ class TheNuSpectrum:
         if np.any(~limits):
             m = ~limits
             ax.errorbar(E[m], phi[m], xerr=[dElo[m], dEup[m]], yerr=[dlo[m], dup[m]],
-                        ls='none', marker=marker, ms=8, color=color,
+                        ls='none', marker=marker, ms=ms, color=color,
                         markeredgecolor=color, elinewidth=2.0, capsize=0,
                         zorder=zorder)
         if np.any(limits):
             m = limits
             ax.errorbar(E[m], phi[m], xerr=[dElo[m], dEup[m]],
                         yerr=[dlo[m], np.zeros(m.sum())], ls='none',
-                        marker='v', ms=8, color=color, markeredgecolor=color,
+                        marker='v', ms=ms, color=color, markeredgecolor=color,
                         markerfacecolor='white', elinewidth=1.6,
                         uplims=True, zorder=zorder)
 
@@ -298,6 +345,15 @@ class TheNuSpectrum:
         self.plot_points(ax, 'KM3NeT_km3_230213A_points.txt',
                          self.experiments['KM3NeT'], zorder=18, marker='D')
 
+    def cosmic_rays(self, ax):
+        """Charged cosmic rays, from the KISS tables behind The_CR_Spectrum."""
+        self.plot_points(ax, 'CR_allparticle_points.txt',
+                         self.cr_colors['allparticle'], zorder=14, marker='o', ms=5)
+        self.plot_points(ax, 'CR_protons_points.txt',
+                         self.cr_colors['protons'], zorder=14, marker='s', ms=4)
+        self.plot_points(ax, 'CR_leptons_points.txt',
+                         self.cr_colors['leptons'], zorder=14, marker='^', ms=4)
+
     # ------------------------------------------------------------ decoration
 
     # text, x [eV], y [flux], colour key, font size
@@ -325,7 +381,40 @@ class TheNuSpectrum:
         (r'Reactors', 1.3e7, 2.0e1, 4.0e6, 6.0e-1, 'reactor'),
     ]
 
-    # Diagonal guide lines marking how many neutrinos above E cross unit area
+    # Labels for the measurements-only figure, coloured by experiment.
+    measured_labels = [
+        (r'$pp$', 7.0e4, 1.5e7, 'Borexino', 18),
+        (r'$^7$Be', 6.5e5, 2.0e5, 'Borexino', 18),
+        (r'$pep$', 3.2e6, 1.2e4, 'Borexino', 18),
+        (r'CNO', 4.0e3, 5.0e1, 'Borexino', 18),
+        (r'$^8$B', 3.0e7, 3.0e-1, 'SNO', 18),
+        (r'Atmospheric', 2.0e9, 5.0e-9, 'Super-K', 18),
+        (r'Astrophysical', 5.0e13, 3.0e-21, 'IceCube', 18),
+        (r'KM3-230213A', 3.0e17, 3.0e-31, 'KM3NeT', 16),
+    ]
+
+    # The KamLAND point sits in the middle of the solar cluster, so it gets a
+    # leader line on the measurements-only figure.
+    measured_arrow_labels = [
+        (r'Geoneutrinos', 4.0e7, 4.0e2, 2.3e6, 4.0, 'KamLAND'),
+    ]
+
+    # Cosmic-ray labels for the multimessenger figure.
+    cr_labels = [
+        (r'Cosmic rays', 7.0e15, 1.0e-24, 'allparticle', 18),
+        (r'CR protons', 5.0e11, 3.0e-13, 'protons', 18),
+        (r'CR $e^-\!+\!e^+$', 1.3e9, 2.0e-14, 'leptons', 18),
+    ]
+
+    # On the multimessenger figure these two neutrino labels fall inside the
+    # cosmic-ray tracks, so they move into clear space and gain leader lines.
+    MM_RELABELLED = ('Astrophysical', 'Cosmogenic')
+    mm_arrow_labels = [
+        (r'Astrophysical', 2.0e12, 2.0e-31, 3.0e14, 2.0e-27, 'astrophysical'),
+        (r'Cosmogenic', 3.0e13, 2.0e-35, 3.0e16, 2.0e-32, 'cosmogenic'),
+    ]
+
+    # Diagonal guide lines marking how many particles above E cross unit area
     # per unit time.  For a spectrum falling as E^-gamma,
     #
     #     N(>E) = int_E^inf Phi dE' = E * Phi(E) / (gamma - 1),
@@ -344,7 +433,7 @@ class TheNuSpectrum:
         (r'1/km$^2$/yr', 1e-10 / SECONDS_PER_YEAR),
     ]
 
-    # All six labels are stacked on this vertical, in the empty left half.
+    # All labels are stacked on this vertical, in the empty left half.
     ISO_RATE_LABEL_X = 3.0e2
 
     def iso_rate_lines(self, ax, color='tab:gray'):
@@ -364,37 +453,93 @@ class TheNuSpectrum:
                     bbox=dict(boxstyle='square,pad=0.12', fc='white', ec='none',
                               alpha=0.85))
 
-    def annotate(self, ax):
-        for text, x, y, key, size in self.labels:
-            ax.text(x, y, text, color=self.colors[key], fontsize=size,
+    DEFAULT_NOTES = [
+        r'Model components: Vitagliano, Tamborra \& Raffelt, '
+        r'Rev.\ Mod.\ Phys.\ 92 (2020) 045006 [arXiv:1910.11878]',
+        r'Stems are monochromatic lines: height is an \emph{integral} flux in '
+        r'cm$^{-2}$ s$^{-1}$, offset down by $10^{6}$ for the solar ones',
+        r'Dotted diagonals: rate above $E$ through unit area, '
+        r'$N(>E) = E\,\Phi(E)$ for an $E^{-2}$ spectrum',
+    ]
+
+    def annotate(self, ax, labels=None, arrow_labels=None, notes=None,
+                 palette=None):
+        """Draw the component labels, leader lines and footnotes.
+
+        ``palette`` maps a label's colour key to a colour; it defaults to the
+        model colours, and the measurements-only figure passes the experiment
+        colours instead.
+        """
+        palette = palette if palette is not None else self.colors
+        labels = self.labels if labels is None else labels
+        arrow_labels = self.arrow_labels if arrow_labels is None else arrow_labels
+        notes = self.DEFAULT_NOTES if notes is None else notes
+
+        for text, x, y, key, size in labels:
+            ax.text(x, y, text, color=palette[key], fontsize=size,
                     zorder=25, ha='center', va='center')
 
-        for text, xt, yt, x, y, key in self.arrow_labels:
-            ax.annotate(text, xy=(x, y), xytext=(xt, yt), color=self.colors[key],
+        for text, xt, yt, x, y, key in arrow_labels:
+            ax.annotate(text, xy=(x, y), xytext=(xt, yt), color=palette[key],
                         fontsize=18, zorder=25, ha='center', va='center',
-                        arrowprops=dict(arrowstyle='->', color=self.colors[key],
+                        arrowprops=dict(arrowstyle='->', color=palette[key],
                                         lw=1.3, shrinkA=6, shrinkB=3))
 
-        notes = [
-            r'Model components: Vitagliano, Tamborra \& Raffelt, '
-            r'Rev.\ Mod.\ Phys.\ 92 (2020) 045006 [arXiv:1910.11878]',
-            r'Stems are monochromatic lines: height is an \emph{integral} flux in '
-            r'cm$^{-2}$ s$^{-1}$, offset down by $10^{6}$ for the solar ones',
-            r'Dotted diagonals: rate above $E$ through unit area, '
-            r'$N(>E) = E\,\Phi(E)$ for an $E^{-2}$ spectrum',
-        ]
         for i, note in enumerate(notes):
-            ax.text(0.013, 0.078 - 0.024 * i, note, transform=ax.transAxes,
+            ax.text(0.013, 0.100 - 0.024 * i, note, transform=ax.transAxes,
                     fontsize=13, color='tab:gray', zorder=25, va='bottom')
 
         ax.text(1.012, 0.5, CREDIT_URL, transform=ax.transAxes, rotation=-90,
                 fontsize=12, color='tab:gray', ha='left', va='center', zorder=25)
 
-    def experiment_legend(self, ax):
-        """Colour key of the measurements, in the style of The_CR_Spectrum."""
-        ax.text(0.985, 0.945, r'Measurements', transform=ax.transAxes,
+    def experiment_legend(self, ax, x=0.985, y=0.945, dy=0.033):
+        """Colour key of the measurements, in the style of The_CR_Spectrum.
+
+        Experiments whose colour carries more than one marker shape get a second
+        line spelling the shapes out, drawn with the real markers.
+        """
+        ax.text(x, y, r'Measurements', transform=ax.transAxes,
                 color='black', fontsize=17, ha='right', zorder=25)
-        for i, (name, color) in enumerate(self.experiments.items()):
+
+        row = y
+        for name, color in self.experiments.items():
+            row -= dy
             entry = f'{name} ({self.experiment_years[name]})'
-            ax.text(0.985, 0.945 - 0.035 * (i + 1), entry, transform=ax.transAxes,
-                    color=color, fontsize=16, ha='right', zorder=25)
+            ax.text(x, row, entry, transform=ax.transAxes, color=color,
+                    fontsize=16, ha='right', zorder=25)
+
+            pairs = self.experiment_markers.get(name)
+            if not pairs:
+                continue
+
+            # Sub-line: fixed slots filled right to left, each holding a marker
+            # followed by its label, so the run ends flush under the entry above.
+            row -= dy * 0.80
+            slot, gap = 0.085, 0.016
+            n = len(pairs)
+            for i, (marker, label) in enumerate(pairs):
+                x_marker = x - (n - i) * slot + 0.012
+                ax.plot([x_marker], [row + 0.005], transform=ax.transAxes,
+                        marker=marker, ms=7, color=color, markeredgecolor=color,
+                        ls='none', clip_on=False, zorder=25)
+                ax.text(x_marker + gap, row, label, transform=ax.transAxes,
+                        color=color, fontsize=13, ha='left', va='baseline',
+                        zorder=25)
+
+    def cosmic_ray_legend(self, ax, x=0.985, y=0.60, dy=0.033):
+        """Colour key of the cosmic-ray species, under the neutrino legend."""
+        ax.text(x, y, r'Cosmic rays', transform=ax.transAxes,
+                color='black', fontsize=17, ha='right', zorder=25)
+        entries = [('allparticle', 'all particle'), ('protons', 'protons'),
+                   ('leptons', r'$e^-\!+\!e^+$')]
+        for i, (key, label) in enumerate(entries):
+            ax.text(x, y - dy * (i + 1), label, transform=ax.transAxes,
+                    color=self.cr_colors[key], fontsize=16, ha='right', zorder=25)
+
+
+def math_ceil(v):
+    return int(np.ceil(v))
+
+
+def math_floor(v):
+    return int(np.floor(v))

@@ -43,6 +43,23 @@ from. The IceCube paper quotes only bin edges, so its `log10E_ref` column is
 The four CSVs are taken as curated by
 [`The_CR_Spectrum`](https://github.com/carmeloevoli/The_CR_Spectrum/tree/master/data/source).
 
+### `source/cosmic_rays/`
+
+The cosmic-ray tables used by plot 2, from the
+[KISS Cosmic Ray DataBase](https://github.com/carmeloevoli/KISS-CosmicRayDataBase),
+itself built mostly on CRDB and KCDC. Credit: C. Evoli.
+
+All of them are taken from that repository's `kiss_tables/` directory, whose
+copies are normalised to one layout — `x, dJ/dx, stat_lo, stat_up, sys_lo,
+sys_up`, whitespace separated. This matters: the same repository also ships the
+*raw* tables under `data/KCDC/` and `data/mytables/`, and those use other column
+layouts and separators. The raw DAMPE proton table, for example, begins with the
+two bin edges, so reading it with the normalised layout silently returns the
+upper bin edge as the flux and produces a spectrum that *rises* with energy.
+`convert_cosmic_rays.py` therefore ends every dataset with
+`check_falling_spectrum`, which compares the first and last decile of the points
+and raises if the flux does not fall.
+
 ### `output/` file conventions
 
 | Suffix | Columns | Units |

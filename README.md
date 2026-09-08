@@ -14,11 +14,30 @@ Spectrum* (GUNS) of
 with measurements from the experiments discussed in that review overlaid on top.
 
 ### <a name="nuspectrum"></a>
-### The Spectrum plot
+### The three plots
+
+**1. The neutrino spectrum** — GUNS model components with the measurements overlaid.
 
 <img src="figures/The_Neutrino_Spectrum.png" width="900">
 
-Download: [png](figures/The_Neutrino_Spectrum.png), [pdf](figures/The_Neutrino_Spectrum.pdf)
+[png](figures/The_Neutrino_Spectrum.png) · [pdf](figures/The_Neutrino_Spectrum.pdf) · `python3 The_Neutrino_Spectrum.py`
+
+**2. The multimessenger spectrum** — the same, plus the charged cosmic rays of
+[`The_CR_Spectrum`](https://github.com/carmeloevoli/The_CR_Spectrum). The axes are
+widened to 10²¹ eV and down to 10⁻⁴² eV⁻¹ cm⁻² s⁻¹ so that the ultra-high-energy
+end of the cosmic-ray spectrum fits.
+
+<img src="figures/The_Multimessenger_Spectrum.png" width="900">
+
+[png](figures/The_Multimessenger_Spectrum.png) · [pdf](figures/The_Multimessenger_Spectrum.pdf) · `python3 The_Multimessenger_Spectrum.py`
+
+**3. The measured neutrino spectrum** — measurements only, no model curves, on
+exactly the same axes, limits and aspect ratio as plot 1, so the two can be laid
+side by side and what is measured read straight off against what is predicted.
+
+<img src="figures/The_Measured_Neutrino_Spectrum.png" width="900">
+
+[png](figures/The_Measured_Neutrino_Spectrum.png) · [pdf](figures/The_Measured_Neutrino_Spectrum.pdf) · `python3 The_Measured_Neutrino_Spectrum.py`
 
 ### What is in the plot
 
@@ -50,6 +69,26 @@ legend carries the year of each result):
 | IceCube | atmospheric ν_μ spectrum (triangles), 100 GeV–400 TeV | Phys. Rev. D **83** (2011) 012001 |
 | IceCube | diffuse astrophysical flux (combined fit, MESE), Glashow resonance | [2026 data release](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ZBO52I); [2021 Glashow release](https://icecube.wisc.edu/data-releases/2021/03/icecube-data-for-the-first-glashow-resonance-candidate/) |
 | KM3NeT | KM3-230213A ultra-high-energy event | Nature **638** (2025) 376 |
+
+The legend carries the year of each result. Where one colour is used for more
+than one marker shape, the shapes are spelled out beneath the entry: Super-K's
+ν_e are circles and ν_μ squares, and IceCube's atmospheric points are triangles
+against circles/squares for the astrophysical ones.
+
+**Cosmic rays** (plot 2 only), taken from the
+[KISS Cosmic Ray DataBase](https://github.com/carmeloevoli/KISS-CosmicRayDataBase)
+that feeds `The_CR_Spectrum`, and coloured by species rather than by experiment
+so the figure stays readable:
+
+| Species | Contributing measurements |
+|---|---|
+| all particle | HAWC, NUCLEON, KASCADE, KASCADE-Grande, IceTop+IceCube, Auger, Tibet, TUNKA-133, TALE, TA |
+| protons | AMS-02, BESS-TeV, CREAM, CALET, DAMPE, LHAASO, IceTop+IceCube, PAMELA |
+| e⁻+e⁺ | AMS-02, CALET, DAMPE, FERMI, VERITAS |
+
+Note that a cosmic-ray spectrum is simply a particle flux, whereas each neutrino
+curve is a single species (see point 2 below), so the two are not a like-for-like
+comparison of particle counts.
 
 ### Reading the plot
 
@@ -100,16 +139,20 @@ are worth spelling out, all of them inherited from Fig. 1 of the GUNS paper:
 ### Layout
 
 ```
-The_Neutrino_Spectrum.py     driver: builds the figure
+The_Neutrino_Spectrum.py           driver: model + measurements
+The_Multimessenger_Spectrum.py     driver: the above + cosmic rays
+The_Measured_Neutrino_Spectrum.py  driver: measurements only
 PlotFuncs.py                 the TheNuSpectrum class (axes, components, labels)
 guns.mplstyle                matplotlib style
 data/source/guns_tables/     ancillary tables of arXiv:1910.11878, unmodified
 data/source/experiments/     experimental data releases, unmodified
+data/source/cosmic_rays/     KISS cosmic-ray tables, unmodified
 data/output/                 plot-ready tables (regenerate with the scripts below)
 data/convert_guns_tables.py            GUNS tables      -> data/output
 data/convert_neutrino_telescopes.py    IceCube, KM3NeT  -> data/output
 data/convert_low_energy_experiments.py Borexino, SNO, KamLAND -> data/output
 data/convert_atmospheric_experiments.py Super-K, IceCube atmospheric -> data/output
+data/convert_cosmic_rays.py            KISS cosmic-ray tables -> data/output
 figures/                     the rendered plot
 ```
 
@@ -121,8 +164,11 @@ python3 convert_guns_tables.py
 python3 convert_neutrino_telescopes.py
 python3 convert_low_energy_experiments.py
 python3 convert_atmospheric_experiments.py
+python3 convert_cosmic_rays.py
 cd ..
 python3 The_Neutrino_Spectrum.py
+python3 The_Multimessenger_Spectrum.py
+python3 The_Measured_Neutrino_Spectrum.py
 ```
 
 Requires `numpy`, `matplotlib` and a LaTeX installation (the style sets
