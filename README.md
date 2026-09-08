@@ -38,7 +38,8 @@ components, taken from the ancillary tables of arXiv:1910.11878:
 | Astrophysical | `IceCube.dat` | IceCube 2017 diffuse band |
 | Cosmogenic | `Cosmogenic.dat` | He (solid) and Fe (dashed) primaries |
 
-**Measurements** (markers and filled bands, colour-coded per experiment):
+**Measurements** (markers and filled bands, colour-coded per experiment; the
+legend carries the year of each result):
 
 | Experiment | Quantity | Reference |
 |---|---|---|
@@ -53,12 +54,19 @@ components, taken from the ancillary tables of arXiv:1910.11878:
 The vertical axis is a *differential* flux in eV⁻¹ cm⁻² s⁻¹. Three conventions
 are worth spelling out, all of them inherited from Fig. 1 of the GUNS paper:
 
-1. **Monochromatic components** (⁷Be, pep, and the CνB mass eigenstates) carry an
-   **integral** flux in cm⁻² s⁻¹, not a differential one. They are drawn as a
-   stem topped by a marker. The solar lines are displayed 10⁶ times below their
-   true value so that they sit next to the continua they belong to; the CνB lines
-   are displayed unscaled. The tables in `data/output/` always hold the *physical*
-   values — the display scale lives in `PlotFuncs.py`.
+1. **Monochromatic components** (⁷Be, pep, and the CνB mass eigenstates) are delta
+   functions in energy, so what they carry is an **integral** flux in cm⁻² s⁻¹,
+   not a differential one — a different unit from everything else on the axis.
+   They are drawn as a stem topped by a marker, and the stem height is that
+   integral flux.
+
+   On top of that there is a cosmetic offset. The true ⁷Be flux is
+   4.3×10⁹ cm⁻² s⁻¹; drawn at that height it would sit four decades above the pp
+   continuum peak (2.4×10⁵) and float free of the solar cluster it belongs to, so
+   the paper — and this plot — draw the *solar* lines a factor 10⁶ lower. The CνB
+   lines are drawn unscaled. The tables in `data/output/` always hold the
+   *physical* values; the display scale lives in `PlotFuncs.py`
+   (`SOLAR_LINE_DISPLAY_SCALE`).
 2. **Species convention.** GUNS plots a single species: one flavour, neutrinos and
    antineutrinos separately. The IceCube and KM3NeT data releases instead quote a
    per-flavour, per-steradian ν+ν̄ flux, so `data/convert_neutrino_telescopes.py`
@@ -70,6 +78,14 @@ are worth spelling out, all of them inherited from Fig. 1 of the GUNS paper:
    geoneutrino flux is *not* treated this way — the GUNS geoneutrino curve
    includes ⁴⁰K, which lies below the inverse-beta-decay threshold and is
    invisible to KamLAND — so it is shown as a single integral-flux marker.
+4. **The dotted diagonals** mark how many neutrinos above a given energy cross
+   unit area per unit time. For a spectrum falling as E^-γ,
+   N(>E) = E·Φ(E)/(γ−1), so a fixed rate is a straight line of slope −1 on these
+   axes. They are drawn for γ = 2, i.e. simply N(>E) = E·Φ(E); for any other
+   slope the reading is off by the order-unity factor (γ−1). They are a quick way
+   to read absolute rates off the plot — the pp peak sits just under the
+   1/µm²/ms line, i.e. ~10¹¹ solar neutrinos per cm² per second, and the
+   cosmogenic flux hovers around 1/km²/yr.
 
 ### Layout
 

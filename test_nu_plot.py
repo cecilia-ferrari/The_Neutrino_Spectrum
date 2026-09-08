@@ -32,6 +32,7 @@ def test_guns_plot():
     fig, ax = plot.FigSetup()
     plot.model(ax)
     plot.data(ax)
+    plot.iso_rate_lines(ax)
     plot.annotate(ax)
     plot.experiment_legend(ax)
     return fig

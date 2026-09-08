@@ -72,6 +72,15 @@ class TheNuSpectrum:
         'cosmogenic': '#5A5A5A',
     }
 
+    # Year of the measurement shown for each experiment, for the legend.
+    experiment_years = {
+        'Borexino': '2018--2023',
+        'SNO': '2013',
+        'KamLAND': '2022',
+        'IceCube': '2021--2026',
+        'KM3NeT': '2025',
+    }
+
     # Colours of the experiments providing measured points.
     experiments = {
         'Borexino': '#F5A400',
@@ -305,6 +314,45 @@ class TheNuSpectrum:
         (r'Reactors', 1.3e7, 2.0e1, 4.0e6, 6.0e-1, 'reactor'),
     ]
 
+    # Diagonal guide lines marking how many neutrinos above E cross unit area
+    # per unit time.  For a spectrum falling as E^-gamma,
+    #
+    #     N(>E) = int_E^inf Phi dE' = E * Phi(E) / (gamma - 1),
+    #
+    # so a fixed rate is a straight line of slope -1 on these log-log axes.  We
+    # draw them for gamma = 2, i.e. simply N(>E) = E * Phi(E); for any other
+    # slope the reading is off by the factor (gamma - 1), of order unity.
+    #   label, rate in cm^-2 s^-1
+    SECONDS_PER_YEAR = 3.156e7
+    iso_rates = [
+        (r'1/$\mu$m$^2$/ms', 1e8 * 1e3),
+        (r'1/$\mu$m$^2$/s', 1e8),
+        (r'1/cm$^2$/s', 1e0),
+        (r'1/m$^2$/s', 1e-4),
+        (r'1/m$^2$/yr', 1e-4 / SECONDS_PER_YEAR),
+        (r'1/km$^2$/yr', 1e-10 / SECONDS_PER_YEAR),
+    ]
+
+    # All six labels are stacked on this vertical, in the empty left half.
+    ISO_RATE_LABEL_X = 3.0e2
+
+    def iso_rate_lines(self, ax, color='tab:gray'):
+        fig = ax.get_figure()
+        fig.canvas.draw()   # settle the layout before measuring the on-screen slope
+
+        E = np.array([self.E_MIN, self.E_MAX])
+        # Every line has slope -1 in log-log, so one angle serves them all.
+        pts = ax.transData.transform(np.column_stack([E, 1.0 / E]))
+        angle = np.degrees(np.arctan2(pts[1, 1] - pts[0, 1], pts[1, 0] - pts[0, 0]))
+
+        x = self.ISO_RATE_LABEL_X
+        for label, rate in self.iso_rates:
+            ax.plot(E, rate / E, ls=':', lw=1.5, color=color, alpha=0.85, zorder=1)
+            ax.text(x, rate / x, label, color=color, fontsize=14, rotation=angle,
+                    ha='center', va='center', zorder=2,
+                    bbox=dict(boxstyle='square,pad=0.12', fc='white', ec='none',
+                              alpha=0.85))
+
     def annotate(self, ax):
         for text, x, y, key, size in self.labels:
             ax.text(x, y, text, color=self.colors[key], fontsize=size,
@@ -319,11 +367,13 @@ class TheNuSpectrum:
         notes = [
             r'Model components: Vitagliano, Tamborra \& Raffelt, '
             r'Rev.\ Mod.\ Phys.\ 92 (2020) 045006 [arXiv:1910.11878]',
-            r'Stems mark monochromatic components: an \emph{integral} flux in '
-            r'cm$^{-2}$ s$^{-1}$ (solar lines drawn $10^{6}$ times lower, as in the paper)',
+            r'Stems are monochromatic lines: height is an \emph{integral} flux in '
+            r'cm$^{-2}$ s$^{-1}$, offset down by $10^{6}$ for the solar ones',
+            r'Dotted diagonals: rate above $E$ through unit area, '
+            r'$N(>E) = E\,\Phi(E)$ for an $E^{-2}$ spectrum',
         ]
         for i, note in enumerate(notes):
-            ax.text(0.013, 0.055 - 0.024 * i, note, transform=ax.transAxes,
+            ax.text(0.013, 0.078 - 0.024 * i, note, transform=ax.transAxes,
                     fontsize=13, color='tab:gray', zorder=25, va='bottom')
 
         ax.text(1.012, 0.5, CREDIT_URL, transform=ax.transAxes, rotation=-90,
@@ -334,5 +384,6 @@ class TheNuSpectrum:
         ax.text(0.985, 0.945, r'Measurements', transform=ax.transAxes,
                 color='black', fontsize=17, ha='right', zorder=25)
         for i, (name, color) in enumerate(self.experiments.items()):
-            ax.text(0.985, 0.945 - 0.035 * (i + 1), name, transform=ax.transAxes,
+            entry = f'{name} ({self.experiment_years[name]})'
+            ax.text(0.985, 0.945 - 0.035 * (i + 1), entry, transform=ax.transAxes,
                     color=color, fontsize=16, ha='right', zorder=25)

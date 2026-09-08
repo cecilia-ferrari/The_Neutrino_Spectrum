@@ -21,6 +21,9 @@ plot.cosmogenic_neutrinos(ax)
 # Measurements from Borexino, SNO, KamLAND, IceCube and KM3NeT
 plot.data(ax)
 
+# Diagonal guides for the integral rate through unit area
+plot.iso_rate_lines(ax)
+
 # Labels, credits and the experiment colour key
 plot.annotate(ax)
 plot.experiment_legend(ax)
