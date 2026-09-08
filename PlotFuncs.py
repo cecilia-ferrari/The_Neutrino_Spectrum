@@ -114,7 +114,7 @@ class TheNuSpectrum:
         'XENONnT': '2024',
         'LZ': '2025',
         'KamLAND': '2022',
-        'Super-K': '2016',
+        'Super-K': '2016, 2026',
         'IceCube': '2011--2026',
         'KM3NeT': '2025',
     }
@@ -124,6 +124,7 @@ class TheNuSpectrum:
     # measurement: a total, flavour-blind 8B flux.
     integral_markers = {
         'KamLAND': 'D',
+        'Super-K': '*',
         'PandaX-4T': 'o',
         'XENONnT': 'o',
         'LZ': 'o',
@@ -132,7 +133,7 @@ class TheNuSpectrum:
     # Where one colour carries several marker shapes, spell them out under the
     # entry: (marker, label) pairs, drawn left to right.
     experiment_markers = {
-        'Super-K': [('o', r'$\nu_e$'), ('s', r'$\nu_\mu$')],
+        'Super-K': [('o', r'$\nu_e$'), ('s', r'$\nu_\mu$'), ('v', r'DSNB')],
         'IceCube': [('^', r'atm.'), ('o', r'astro.')],
     }
 
@@ -355,6 +356,11 @@ class TheNuSpectrum:
         self.plot_points(ax, 'IceCube_atm_numu_points.txt',
                          self.experiments['IceCube'], zorder=16, marker='^')
 
+        # Super-K DSNB: published 90% C.L. upper limits (drawn as open
+        # down-arrows by plot_points, since their upper error is null).
+        self.plot_points(ax, 'SuperK_DSNB_limits_points.txt',
+                         self.experiments['Super-K'], zorder=16)
+
         self.plot_points(ax, 'IceCube_combinedfit_points.txt',
                          self.experiments['IceCube'], zorder=17)
         self.plot_points(ax, 'IceCube_mese_points.txt',
@@ -407,6 +413,7 @@ class TheNuSpectrum:
         (r'$pep$', 3.2e6, 1.2e4, 'Borexino', 18),
         (r'CNO', 4.0e3, 5.0e1, 'Borexino', 18),
         (r'$^8$B', 3.0e7, 3.0e-1, 'SNO', 18),
+        (r'DSNB', 8.0e7, 1.0e-5, 'Super-K', 18),
         (r'Atmospheric', 8.0e9, 5.0e-9, 'Super-K', 18),
         (r'Astrophysical', 1.5e15, 3.0e-22, 'IceCube', 18),
         (r'KM3-230213A', 3.0e17, 3.0e-31, 'KM3NeT', 16),
@@ -481,6 +488,9 @@ class TheNuSpectrum:
         r'$N(>E) = E\,\Phi(E)$ for an $E^{-2}$ spectrum',
         r'PandaX-4T, XENONnT and LZ measure the \emph{total} $^8$B flux via '
         r'CE$\nu$NS; their points are spread in energy only for legibility',
+        r'Super-K DSNB: open triangles are 90\% C.L.\ upper limits '
+        r'[arXiv:2511.02222]; the star is the \emph{preliminary} '
+        r'2.6$\sigma$ indication shown at Neutrino 2026',
     ]
 
     def annotate(self, ax, labels=None, arrow_labels=None, notes=None,
@@ -507,7 +517,7 @@ class TheNuSpectrum:
                                         lw=1.3, shrinkA=6, shrinkB=3))
 
         for i, note in enumerate(notes):
-            ax.text(0.013, 0.118 - 0.023 * i, note, transform=ax.transAxes,
+            ax.text(0.013, 0.135 - 0.022 * i, note, transform=ax.transAxes,
                     fontsize=13, color='tab:gray', zorder=25, va='bottom')
 
         ax.text(1.012, 0.5, CREDIT_URL, transform=ax.transAxes, rotation=-90,
@@ -540,9 +550,13 @@ class TheNuSpectrum:
             n = len(pairs)
             for i, (marker, label) in enumerate(pairs):
                 x_marker = x - (n - i) * slot + 0.012
+                # A down-triangle always means an upper limit here, and those
+                # are drawn open on the figure, so the key matches.
+                face = 'white' if marker == 'v' else color
                 ax.plot([x_marker], [row + 0.005], transform=ax.transAxes,
                         marker=marker, ms=7, color=color, markeredgecolor=color,
-                        ls='none', clip_on=False, zorder=25)
+                        markerfacecolor=face, ls='none', clip_on=False,
+                        zorder=25)
                 ax.text(x_marker + gap, row, label, transform=ax.transAxes,
                         color=color, fontsize=13, ha='left', va='baseline',
                         zorder=25)

@@ -1,0 +1,25 @@
+# Super-Kamiokande 90% C.L. upper limits on the astrophysical (DSNB) electron
+# antineutrino flux, from Table 6 of
+#   Super-Kamiokande Coll., "Search for Diffuse Supernova Neutrino Background
+#   with 956.2 days of Super-Kamiokande Gadolinium Dataset",
+#   arXiv:2511.02222, ApJ (accepted) -- doi:10.3847/1538-4357/ae6c20
+#
+# Exposure 22,500 x 956.2 m^3 day (552.2 d of SK-VI at 0.01% Gd + 404.0 d of
+# SK-VII at 0.03% Gd, through September 2023).
+#
+# The column taken here is the *observed* upper limit for SK-VI+VII with the
+# BDT-based neutron tagging, i.e. the limit the paper quotes as the world's most
+# stringent below 17.3 MeV.  Above that the SK-IV pure-water dataset is still
+# better (0.17 and 0.04 in the last two bins), because of its smaller
+# non-NCQE systematic and larger exposure; see the README.
+#
+# These are nu_e-bar limits, so they are already a single species and already
+# angle-integrated -- no 4pi and no species factor is applied, only
+# MeV^-1 -> eV^-1.
+#
+# E_lo_MeV,E_up_MeV,limit_cm2_s_MeV
+9.29,11.29,33.20
+11.29,13.29,8.14
+13.29,17.29,2.76
+17.29,25.29,0.37
+25.29,31.29,0.16

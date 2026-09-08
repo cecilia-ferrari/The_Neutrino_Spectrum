@@ -34,6 +34,7 @@ notebook, is left alone.
 | `IntegralFluxes.csv` | Borexino / SNO / KamLAND / PandaX-4T / XENONnT / LZ integral fluxes | hand-compiled, references in the file header |
 | `SuperK2016_atmospheric.csv` | atmospheric ν_e and ν_μ spectra | Table 4 of [arXiv:1510.08127](https://arxiv.org/abs/1510.08127) |
 | `IceCube2011_atmospheric_numu.csv` | unfolded atmospheric ν_μ spectrum | Table 2 of [arXiv:1010.3980](https://arxiv.org/abs/1010.3980) |
+| `SuperK2026_DSNB_limits.csv` | DSNB ν̄ₑ 90% C.L. upper limits | Table 6 of [arXiv:2511.02222](https://arxiv.org/abs/2511.02222) |
 
 The two atmospheric tables are transcribed from the published papers, which ship
 no machine-readable release; each file header records the exact table it comes

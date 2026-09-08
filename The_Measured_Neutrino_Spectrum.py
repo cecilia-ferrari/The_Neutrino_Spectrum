@@ -22,7 +22,7 @@ notes = [
     r'cm$^{-2}$ s$^{-1}$, offset down by $10^{6}$ for the solar ones',
     r'Dotted diagonals: rate above $E$ through unit area, '
     r'$N(>E) = E\,\Phi(E)$ for an $E^{-2}$ spectrum',
-]
+] + plot.DEFAULT_NOTES[3:]
 plot.annotate(ax, labels=plot.measured_labels,
               arrow_labels=plot.measured_arrow_labels,
               palette=plot.experiments, notes=notes)

@@ -20,6 +20,11 @@
 #  [5] PandaX Coll., Phys. Rev. Lett. 133 (2024) 191001 [arXiv:2407.10892] -- 2.64 sigma
 #  [6] XENON Coll., Phys. Rev. Lett. 133 (2024) 191002 [arXiv:2408.02877] -- 2.73 sigma
 #  [7] LZ Coll., arXiv:2512.08065 -- 4.5 sigma, 5.7 t yr
+#  [8] Super-Kamiokande Coll., presented at Neutrino 2026 (UC Irvine,
+#      25 June 2026) -- PRELIMINARY, no preprint or publication yet.  First
+#      indication of the DSNB at 2.6 sigma (99.5% C.L.) from ~5000 days:
+#      3349 d of pure water (2008-2020) plus 1653 d of Gd loading (2020-).
+#      The excess spans 13.3-81.3 MeV; the quoted flux is integrated over it.
 #
 # [5]-[7] are the 8B solar neutrino flux seen through coherent elastic
 # neutrino-nucleus scattering in xenon dark-matter detectors.  CEvNS is a
@@ -39,3 +44,4 @@ geo,KamLAND,integral,2.30e6,3.60e6,0.60e6,0.60e6,[4]
 B8,PandaX-4T,integral,5.00e6,8.40e6,3.10e6,3.10e6,[5]
 B8,XENONnT,integral,8.00e6,4.70e6,2.30e6,3.60e6,[6]
 B8,LZ,integral,1.25e7,3.10e6,1.30e6,2.10e6,[7]
+DSNB,Super-K,integral,3.00e7,3.60e0,1.60e0,1.60e0,[8]

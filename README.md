@@ -78,6 +78,8 @@ legend carries the year of each result):
 | LZ | total ⁸B flux via CEνNS, (3.1 ⁺²·¹₋₁·₃)×10⁶ cm⁻² s⁻¹, 4.5σ | [arXiv:2512.08065](https://arxiv.org/abs/2512.08065) |
 | KamLAND | U+Th geoneutrino flux | Geophys. Res. Lett. **49** (2022) e2022GL099566 |
 | Super-Kamiokande | atmospheric ν_e (circles) and ν_μ (squares) spectra, 0.16–10⁴ GeV | Phys. Rev. D **94** (2016) 052001 |
+| Super-Kamiokande | DSNB ν̄ₑ 90% C.L. upper limits (open triangles), 9.3–31.3 MeV | [arXiv:2511.02222](https://arxiv.org/abs/2511.02222), ApJ |
+| Super-Kamiokande | DSNB indication (star), 3.6 ± 1.6 cm⁻² s⁻¹, 2.6σ — **preliminary** | Neutrino 2026, 25 June 2026 |
 | IceCube | atmospheric ν_μ spectrum (triangles), 100 GeV–400 TeV | Phys. Rev. D **83** (2011) 012001 |
 | IceCube | diffuse astrophysical flux (combined fit, MESE), Glashow resonance | [2026 data release](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ZBO52I); [2021 Glashow release](https://icecube.wisc.edu/data-releases/2021/03/icecube-data-for-the-first-glashow-resonance-candidate/) |
 | KM3NeT | KM3-230213A ultra-high-energy event | Nature **638** (2025) 376 |
@@ -98,6 +100,31 @@ spectrum purely so the points can be told apart; all three refer to the same
 energy-integrated flux. Note also that on a 54-decade axis a ±37% error bar is
 about 0.03 inch tall, so the points look far more precise than they are — the
 significances above are the honest measure.
+
+### The two Super-K DSNB results
+
+The diffuse supernova neutrino background is the one component where the
+measurements are only now reaching the prediction, so both current Super-K
+results are shown and they are *not* the same thing.
+
+The **open triangles** are published 90% C.L. upper limits on the ν̄ₑ flux from
+the 956.2-day gadolinium dataset (552.2 d of SK-VI at 0.01% Gd plus 404.0 d of
+SK-VII at 0.03% Gd). These are differential, in cm⁻² s⁻¹ MeV⁻¹ on ν̄ₑ alone,
+which is already a single species and already integrated over the sky — so the
+only conversion needed is MeV⁻¹ → eV⁻¹, and they can be read directly against
+the DSNB model band. The values plotted are the SK-VI+VII BDT limits, the ones
+the paper calls the world's most stringent below 17.3 MeV; above that the older
+SK-IV pure-water dataset is still better (0.17 and 0.04 cm⁻² s⁻¹ MeV⁻¹ in the
+last two bins) thanks to its smaller non-NCQE systematic and larger exposure.
+
+The **star** is the result announced at Neutrino 2026 on 25 June 2026: a first
+*indication* of the DSNB at 2.6σ (99.5% C.L.) from ~5000 days — 3349 days of
+pure water (2008–2020) plus 1653 days of Gd loading — with an excess over
+13.3–81.3 MeV corresponding to an integrated flux of 3.6 ± 1.6 cm⁻² s⁻¹. It is
+**preliminary**: there is no preprint or publication for it yet, and 2.6σ is
+well short of discovery. It is drawn as an integral-flux point, in the same
+convention as the ⁷Be, pep, geoneutrino and CEνNS markers, and is flagged in the
+figure footnote.
 
 The legend carries the year of each result. Where one colour is used for more
 than one marker shape, the shapes are spelled out beneath the entry: Super-K's
@@ -182,6 +209,7 @@ data/convert_guns_tables.py            GUNS tables      -> data/output
 data/convert_neutrino_telescopes.py    IceCube, KM3NeT  -> data/output
 data/convert_low_energy_experiments.py Borexino, SNO, KamLAND -> data/output
 data/convert_atmospheric_experiments.py Super-K, IceCube atmospheric -> data/output
+data/convert_dsnb_limits.py            Super-K DSNB limits -> data/output
 data/convert_cosmic_rays.py            KISS cosmic-ray tables -> data/output
 figures/                     the rendered plot
 ```
@@ -194,6 +222,7 @@ python3 convert_guns_tables.py
 python3 convert_neutrino_telescopes.py
 python3 convert_low_energy_experiments.py
 python3 convert_atmospheric_experiments.py
+python3 convert_dsnb_limits.py
 python3 convert_cosmic_rays.py
 cd ..
 python3 The_Neutrino_Spectrum.py
