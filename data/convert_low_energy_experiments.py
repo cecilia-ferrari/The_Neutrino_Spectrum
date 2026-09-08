@@ -41,8 +41,10 @@ SHAPES = {
 BAND_HEADER = '# E [eV] - Phi_min [eV^-1 cm^-2 s^-1] - Phi_max [eV^-1 cm^-2 s^-1]\n'
 LINE_HEADER = '# E [eV] - Phi [cm^-2 s^-1] - dPhi_lo - dPhi_up\n'
 
-# kind -> output file collecting the integral-flux measurements
-INTEGRAL_OUTPUT = {'line': 'Measured_lines.txt', 'integral': 'Measured_integrals.txt'}
+# 'line' measurements all share one file; 'integral' ones get one file per
+# experiment, so that the plot can colour them individually.
+LINE_OUTPUT = 'Measured_lines.txt'
+INTEGRAL_OUTPUT_FMT = 'Measured_integrals_{experiment}.txt'
 
 
 def load_measurements():
@@ -80,21 +82,28 @@ def renormalise(component, flux, err_lo, err_up):
 
 
 def convert_all():
-    integrals = {kind: [] for kind in INTEGRAL_OUTPUT}
+    lines = []
+    integrals = {}
 
     for m in load_measurements():
         if m['kind'] == 'continuum':
             E, lo, up = renormalise(m['component'], m['flux'], m['err_lo'], m['err_up'])
             name = f"{m['experiment']}_{m['component']}_band.txt"
             write_columns(OUTPUT_DIR / name, BAND_HEADER, E, lo, up)
-        else:
-            integrals[m['kind']].append(
-                f"{m['E_ref']:14.6e} {m['flux']:14.6e} "
-                f"{m['err_lo']:14.6e} {m['err_up']:14.6e}\n")
+            continue
 
-    for kind, rows in integrals.items():
-        if rows:
-            write_data_to_file(OUTPUT_DIR / INTEGRAL_OUTPUT[kind], LINE_HEADER, rows)
+        row = (f"{m['E_ref']:14.6e} {m['flux']:14.6e} "
+               f"{m['err_lo']:14.6e} {m['err_up']:14.6e}\n")
+        if m['kind'] == 'line':
+            lines.append(row)
+        else:
+            integrals.setdefault(m['experiment'], []).append(row)
+
+    if lines:
+        write_data_to_file(OUTPUT_DIR / LINE_OUTPUT, LINE_HEADER, lines)
+    for experiment, rows in integrals.items():
+        name = INTEGRAL_OUTPUT_FMT.format(experiment=experiment)
+        write_data_to_file(OUTPUT_DIR / name, LINE_HEADER, rows)
 
 
 if __name__ == '__main__':

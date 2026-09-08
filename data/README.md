@@ -31,7 +31,7 @@ notebook, is left alone.
 | `IceCube2026_mese.csv` | diffuse astrophysical flux, MESE sample | as above |
 | `IceCube2021_Glashow.csv` | Glashow resonance candidate | [IceCube data release](https://icecube.wisc.edu/data-releases/2021/03/icecube-data-for-the-first-glashow-resonance-candidate/) |
 | `KM3NeT2025_km3_230213A.csv` | KM3-230213A event | KM3NeT, Nature 638 (2025) 376 |
-| `IntegralFluxes.csv` | Borexino / SNO / KamLAND integral fluxes | hand-compiled, references in the file header |
+| `IntegralFluxes.csv` | Borexino / SNO / KamLAND / PandaX-4T / XENONnT / LZ integral fluxes | hand-compiled, references in the file header |
 | `SuperK2016_atmospheric.csv` | atmospheric ν_e and ν_μ spectra | Table 4 of [arXiv:1510.08127](https://arxiv.org/abs/1510.08127) |
 | `IceCube2011_atmospheric_numu.csv` | unfolded atmospheric ν_μ spectrum | Table 2 of [arXiv:1010.3980](https://arxiv.org/abs/1010.3980) |
 

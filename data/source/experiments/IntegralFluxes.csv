@@ -17,6 +17,17 @@
 #  [2] Borexino Coll., Phys. Rev. D 108 (2023) 102005 -- final CNO result
 #  [3] SNO Coll., Phys. Rev. C 88 (2013) 025501 -- NC total 8B flux
 #  [4] KamLAND Coll., Geophys. Res. Lett. 49 (2022) e2022GL099566 -- geoneutrinos
+#  [5] PandaX Coll., Phys. Rev. Lett. 133 (2024) 191001 [arXiv:2407.10892] -- 2.64 sigma
+#  [6] XENON Coll., Phys. Rev. Lett. 133 (2024) 191002 [arXiv:2408.02877] -- 2.73 sigma
+#  [7] LZ Coll., arXiv:2512.08065 -- 4.5 sigma, 5.7 t yr
+#
+# [5]-[7] are the 8B solar neutrino flux seen through coherent elastic
+# neutrino-nucleus scattering in xenon dark-matter detectors.  CEvNS is a
+# neutral-current process and so is flavour-blind: like SNO's NC channel these
+# measure the *total* 8B flux, and the four numbers are directly comparable.
+# Their E_ref values are spread over the 8B spectrum purely so that the three
+# points and their large error bars can be told apart; all three refer to the
+# same energy-integrated flux, not to a spectral measurement.
 #
 # component,experiment,kind,E_ref_eV,flux,flux_err_low,flux_err_up,reference
 pp,Borexino,continuum,0.0,6.10e10,0.71e10,0.58e10,[1]
@@ -25,3 +36,6 @@ pep,Borexino,line,1.44e6,1.27e8,0.23e8,0.21e8,[1]
 B8,SNO,continuum,0.0,5.25e6,0.20e6,0.20e6,[3]
 CNO,Borexino,continuum,0.0,6.70e8,0.80e8,1.20e8,[2]
 geo,KamLAND,integral,2.30e6,3.60e6,0.60e6,0.60e6,[4]
+B8,PandaX-4T,integral,5.00e6,8.40e6,3.10e6,3.10e6,[5]
+B8,XENONnT,integral,8.00e6,4.70e6,2.30e6,3.60e6,[6]
+B8,LZ,integral,1.25e7,3.10e6,1.30e6,2.10e6,[7]

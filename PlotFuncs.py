@@ -97,6 +97,9 @@ class TheNuSpectrum:
     experiments = {
         'Borexino': '#F5A400',
         'SNO': '#00A651',
+        'PandaX-4T': '#4169E1',
+        'XENONnT': '#5B2C8D',
+        'LZ': '#8B4513',
         'KamLAND': '#FF3DBE',
         'Super-K': '#D62728',
         'IceCube': '#8A2BE2',
@@ -107,10 +110,23 @@ class TheNuSpectrum:
     experiment_years = {
         'Borexino': '2018--2023',
         'SNO': '2013',
+        'PandaX-4T': '2024',
+        'XENONnT': '2024',
+        'LZ': '2025',
         'KamLAND': '2022',
         'Super-K': '2016',
         'IceCube': '2011--2026',
         'KM3NeT': '2025',
+    }
+
+    # Experiments quoting an integral flux, and the marker each is drawn with.
+    # The three CEvNS results share a shape because they are the same kind of
+    # measurement: a total, flavour-blind 8B flux.
+    integral_markers = {
+        'KamLAND': 'D',
+        'PandaX-4T': 'o',
+        'XENONnT': 'o',
+        'LZ': 'o',
     }
 
     # Where one colour carries several marker shapes, spell them out under the
@@ -324,8 +340,11 @@ class TheNuSpectrum:
                        zorder=4, alpha=0.75, lw=3.0)
         self.plot_measured_lines(ax, 'Measured_lines.txt', self.experiments['Borexino'],
                                  self.SOLAR_LINE_DISPLAY_SCALE, zorder=16)
-        self.plot_measured_lines(ax, 'Measured_integrals.txt', self.experiments['KamLAND'],
-                                 self.SOLAR_LINE_DISPLAY_SCALE, zorder=16, marker='D')
+        for experiment, marker in self.integral_markers.items():
+            self.plot_measured_lines(
+                ax, f'Measured_integrals_{experiment}.txt',
+                self.experiments[experiment], self.SOLAR_LINE_DISPLAY_SCALE,
+                zorder=16, marker=marker)
 
         # Atmospheric spectra: Super-K measures nu_e (circles) and nu_mu
         # (squares); the IceCube unfolding (triangles) is nu_mu only.
@@ -368,9 +387,9 @@ class TheNuSpectrum:
         (r'$^8$B', 3.0e7, 3.0e-1, 'solar_nuclear', 18),
         (r'hep', 1.3e8, 2.0e-3, 'solar_nuclear', 18),
         (r'DSNB', 1.1e8, 5.0e-6, 'DSNB', 18),
-        (r'Atmospheric', 2.0e9, 5.0e-9, 'atmospheric', 18),
+        (r'Atmospheric', 8.0e9, 5.0e-9, 'atmospheric', 18),
         (r'Astrophysical', 1.5e15, 3.0e-22, 'astrophysical', 18),
-        (r'Cosmogenic', 2.5e17, 2.0e-31, 'cosmogenic', 18),
+        (r'Cosmogenic', 3.5e17, 2.0e-31, 'cosmogenic', 18),
     ]
 
     # Components buried in the crowded 10 keV - 10 MeV region get a leader line:
@@ -388,7 +407,7 @@ class TheNuSpectrum:
         (r'$pep$', 3.2e6, 1.2e4, 'Borexino', 18),
         (r'CNO', 4.0e3, 5.0e1, 'Borexino', 18),
         (r'$^8$B', 3.0e7, 3.0e-1, 'SNO', 18),
-        (r'Atmospheric', 2.0e9, 5.0e-9, 'Super-K', 18),
+        (r'Atmospheric', 8.0e9, 5.0e-9, 'Super-K', 18),
         (r'Astrophysical', 1.5e15, 3.0e-22, 'IceCube', 18),
         (r'KM3-230213A', 3.0e17, 3.0e-31, 'KM3NeT', 16),
     ]
@@ -396,7 +415,7 @@ class TheNuSpectrum:
     # The KamLAND point sits in the middle of the solar cluster, so it gets a
     # leader line on the measurements-only figure.
     measured_arrow_labels = [
-        (r'Geoneutrinos', 4.0e7, 4.0e2, 2.3e6, 4.0, 'KamLAND'),
+        (r'Geoneutrinos', 2.5e5, 3.0e-4, 2.15e6, 3.0, 'KamLAND'),
     ]
 
     # Cosmic-ray labels for the multimessenger figure.
@@ -460,6 +479,8 @@ class TheNuSpectrum:
         r'cm$^{-2}$ s$^{-1}$, offset down by $10^{6}$ for the solar ones',
         r'Dotted diagonals: rate above $E$ through unit area, '
         r'$N(>E) = E\,\Phi(E)$ for an $E^{-2}$ spectrum',
+        r'PandaX-4T, XENONnT and LZ measure the \emph{total} $^8$B flux via '
+        r'CE$\nu$NS; their points are spread in energy only for legibility',
     ]
 
     def annotate(self, ax, labels=None, arrow_labels=None, notes=None,
@@ -486,7 +507,7 @@ class TheNuSpectrum:
                                         lw=1.3, shrinkA=6, shrinkB=3))
 
         for i, note in enumerate(notes):
-            ax.text(0.013, 0.100 - 0.024 * i, note, transform=ax.transAxes,
+            ax.text(0.013, 0.118 - 0.023 * i, note, transform=ax.transAxes,
                     fontsize=13, color='tab:gray', zorder=25, va='bottom')
 
         ax.text(1.012, 0.5, CREDIT_URL, transform=ax.transAxes, rotation=-90,
@@ -526,7 +547,7 @@ class TheNuSpectrum:
                         color=color, fontsize=13, ha='left', va='baseline',
                         zorder=25)
 
-    def cosmic_ray_legend(self, ax, x=0.985, y=0.60, dy=0.033):
+    def cosmic_ray_legend(self, ax, x=0.985, y=0.44, dy=0.033):
         """Colour key of the cosmic-ray species, under the neutrino legend."""
         ax.text(x, y, r'Cosmic rays', transform=ax.transAxes,
                 color='black', fontsize=17, ha='right', zorder=25)

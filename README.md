@@ -63,12 +63,32 @@ legend carries the year of each result):
 | Experiment | Quantity | Reference |
 |---|---|---|
 | Borexino | pp, ⁷Be, pep, CNO fluxes | Nature **562** (2018) 505; Phys. Rev. D **108** (2023) 102005 |
-| SNO | ⁸B total (NC) flux | Phys. Rev. C **88** (2013) 025501 |
+| SNO | ⁸B total (NC) flux, (5.25 ± 0.20)×10⁶ cm⁻² s⁻¹ | Phys. Rev. C **88** (2013) 025501 |
+| PandaX-4T | total ⁸B flux via CEνNS, (8.4 ± 3.1)×10⁶ cm⁻² s⁻¹, 2.64σ | Phys. Rev. Lett. **133** (2024) 191001 |
+| XENONnT | total ⁸B flux via CEνNS, (4.7 ⁺³·⁶₋₂·₃)×10⁶ cm⁻² s⁻¹, 2.73σ | Phys. Rev. Lett. **133** (2024) 191002 |
+| LZ | total ⁸B flux via CEνNS, (3.1 ⁺²·¹₋₁·₃)×10⁶ cm⁻² s⁻¹, 4.5σ | [arXiv:2512.08065](https://arxiv.org/abs/2512.08065) |
 | KamLAND | U+Th geoneutrino flux | Geophys. Res. Lett. **49** (2022) e2022GL099566 |
 | Super-Kamiokande | atmospheric ν_e (circles) and ν_μ (squares) spectra, 0.16–10⁴ GeV | Phys. Rev. D **94** (2016) 052001 |
 | IceCube | atmospheric ν_μ spectrum (triangles), 100 GeV–400 TeV | Phys. Rev. D **83** (2011) 012001 |
 | IceCube | diffuse astrophysical flux (combined fit, MESE), Glashow resonance | [2026 data release](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ZBO52I); [2021 Glashow release](https://icecube.wisc.edu/data-releases/2021/03/icecube-data-for-the-first-glashow-resonance-candidate/) |
 | KM3NeT | KM3-230213A ultra-high-energy event | Nature **638** (2025) 376 |
+
+The last four rows measure the same thing. Coherent elastic neutrino-nucleus
+scattering is a **neutral-current** process, so it is flavour-blind: like SNO's
+NC channel, the xenon dark-matter detectors measure the *total* ⁸B flux summed
+over flavours, and all four numbers are directly comparable. Seeing solar
+neutrinos as a signal rather than a background is what "entering the neutrino
+fog" means for these experiments.
+
+They are drawn differently for a reason. SNO's ±4% is precise enough to set the
+normalisation of a spectrum, so it becomes a renormalised band (point 3 below).
+The CEνNS results are 30–75% determinations of a rate, not of a shape, so they
+are drawn as integral-flux points in the same convention as the ⁷Be, pep and
+geoneutrino markers. Their three reference energies are spread across the ⁸B
+spectrum purely so the points can be told apart; all three refer to the same
+energy-integrated flux. Note also that on a 54-decade axis a ±37% error bar is
+about 0.03 inch tall, so the points look far more precise than they are — the
+significances above are the honest measure.
 
 The legend carries the year of each result. Where one colour is used for more
 than one marker shape, the shapes are spelled out beneath the entry: Super-K's
