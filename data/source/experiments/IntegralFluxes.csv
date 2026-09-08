@@ -1,0 +1,27 @@
+# Measured integral neutrino fluxes at Earth (total, i.e. summed over the
+# flavours the experiment is sensitive to after oscillations, as quoted by the
+# collaborations).  Fluxes in cm^-2 s^-1.
+#
+# 'component' must match the name of a GUNS component defined in PlotFuncs.py so
+# that the measured normalisation can be attached to the corresponding model
+# spectral shape.
+#
+# kind = line      -> monochromatic, plotted at E_ref as an integral flux
+# kind = integral  -> continuum whose *integral* only is quoted; plotted at E_ref
+#                     as an integral flux, because the model curve and the measured
+#                     quantity do not cover the same spectrum (see README)
+# kind = continuum -> plotted as the GUNS shape renormalised to the measured value
+#
+# References
+#  [1] Borexino Coll., Nature 562 (2018) 505  -- pp-chain comprehensive measurement
+#  [2] Borexino Coll., Phys. Rev. D 108 (2023) 102005 -- final CNO result
+#  [3] SNO Coll., Phys. Rev. C 88 (2013) 025501 -- NC total 8B flux
+#  [4] KamLAND Coll., Geophys. Res. Lett. 49 (2022) e2022GL099566 -- geoneutrinos
+#
+# component,experiment,kind,E_ref_eV,flux,flux_err_low,flux_err_up,reference
+pp,Borexino,continuum,0.0,6.10e10,0.71e10,0.58e10,[1]
+Be7,Borexino,line,8.62e5,4.99e9,0.14e9,0.13e9,[1]
+pep,Borexino,line,1.44e6,1.27e8,0.23e8,0.21e8,[1]
+B8,SNO,continuum,0.0,5.25e6,0.20e6,0.20e6,[3]
+CNO,Borexino,continuum,0.0,6.70e8,0.80e8,1.20e8,[2]
+geo,KamLAND,integral,2.30e6,3.60e6,0.60e6,0.60e6,[4]

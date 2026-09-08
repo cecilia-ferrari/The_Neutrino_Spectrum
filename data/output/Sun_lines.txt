@@ -1,0 +1,4 @@
+# E [eV] - Phi [cm^-2 s^-1] (integral flux of a monochromatic line)
+  3.860000e+05   4.944001e+08
+  8.630000e+05   4.305600e+09
+  1.445000e+06   1.447998e+08
