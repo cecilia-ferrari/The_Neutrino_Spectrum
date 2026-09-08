@@ -211,19 +211,19 @@ class TheNuSpectrum:
                         lw=lw, alpha=alpha, zorder=zorder)
         ax.plot(E, up, color=color, lw=lw, zorder=zorder)
 
-    def plot_spectral_lines(self, ax, filename, color, scale, zorder=1, marker='o'):
-        """Monochromatic components: a stem topped by a marker.
+    def plot_spectral_lines(self, ax, filename, color, scale, zorder=1):
+        """Monochromatic model components, drawn as a bare stem.
 
-        ``scale`` is the display scale defined above; the tables themselves hold
-        physical integral fluxes in cm^-2 s^-1.
+        The stem top is the value; no marker is added, so that markers on this
+        figure always mean a measurement.  ``scale`` is the display scale defined
+        above -- the tables themselves hold physical integral fluxes in
+        cm^-2 s^-1.
         """
         table = self.load(filename)
         E, phi = table[0], table[1] * scale
         for E_, phi_ in zip(E, phi):
             ax.plot([E_, E_], [phi_ / 10 ** self.LINE_STEM_DECADES, phi_],
                     color=color, lw=2.5, zorder=zorder, solid_capstyle='butt')
-        ax.plot(E, phi, ls='none', marker=marker, ms=9, color=color,
-                markeredgecolor=color, zorder=zorder + 1)
 
     def plot_measured_lines(self, ax, filename, color, scale, zorder=1, marker='s'):
         """Measured integral fluxes, with their error bars."""
@@ -363,33 +363,33 @@ class TheNuSpectrum:
         (r'$^3$H', 4.0e-3, 2.0e-6, 'BBN', 18),
         (r'Solar (thermal)', 5.0e0, 3.0e4, 'solar_thermal', 18),
         (r'$pp$', 7.0e4, 1.5e7, 'solar_nuclear', 18),
-        (r'$^7$Be', 6.5e5, 2.0e5, 'solar_nuclear', 18),
+        (r'$^7$Be', 1.1e6, 2.0e6, 'solar_nuclear', 18),
         (r'$pep$', 3.2e6, 1.2e4, 'solar_nuclear', 18),
         (r'$^8$B', 3.0e7, 3.0e-1, 'solar_nuclear', 18),
-        (r'hep', 4.5e7, 3.0e-4, 'solar_nuclear', 18),
+        (r'hep', 1.3e8, 2.0e-3, 'solar_nuclear', 18),
         (r'DSNB', 1.1e8, 5.0e-6, 'DSNB', 18),
         (r'Atmospheric', 2.0e9, 5.0e-9, 'atmospheric', 18),
-        (r'Astrophysical', 5.0e13, 3.0e-21, 'astrophysical', 18),
-        (r'Cosmogenic', 2.5e17, 3.0e-29, 'cosmogenic', 18),
+        (r'Astrophysical', 1.5e15, 3.0e-22, 'astrophysical', 18),
+        (r'Cosmogenic', 2.5e17, 2.0e-31, 'cosmogenic', 18),
     ]
 
     # Components buried in the crowded 10 keV - 10 MeV region get a leader line:
     # text, x_text, y_text, x_tip, y_tip, colour key
     arrow_labels = [
-        (r'CNO', 1.7e3, 3.0e0, 2.0e4, 1.6e0, 'solar_nuclear'),
+        (r'CNO', 1.2e2, 2.5e0, 2.0e4, 1.6e0, 'solar_nuclear'),
         (r'Geoneutrinos', 5.0e4, 6.0e-7, 1.5e5, 2.0e1, 'geoneutrinos'),
-        (r'Reactors', 1.3e7, 2.0e1, 4.0e6, 6.0e-1, 'reactor'),
+        (r'Reactors', 5.0e7, 5.0e2, 4.0e6, 6.0e-1, 'reactor'),
     ]
 
     # Labels for the measurements-only figure, coloured by experiment.
     measured_labels = [
         (r'$pp$', 7.0e4, 1.5e7, 'Borexino', 18),
-        (r'$^7$Be', 6.5e5, 2.0e5, 'Borexino', 18),
+        (r'$^7$Be', 1.1e6, 2.0e6, 'Borexino', 18),
         (r'$pep$', 3.2e6, 1.2e4, 'Borexino', 18),
         (r'CNO', 4.0e3, 5.0e1, 'Borexino', 18),
         (r'$^8$B', 3.0e7, 3.0e-1, 'SNO', 18),
         (r'Atmospheric', 2.0e9, 5.0e-9, 'Super-K', 18),
-        (r'Astrophysical', 5.0e13, 3.0e-21, 'IceCube', 18),
+        (r'Astrophysical', 1.5e15, 3.0e-22, 'IceCube', 18),
         (r'KM3-230213A', 3.0e17, 3.0e-31, 'KM3NeT', 16),
     ]
 
