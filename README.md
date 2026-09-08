@@ -39,6 +39,15 @@ side by side and what is measured read straight off against what is predicted.
 
 [png](figures/The_Measured_Neutrino_Spectrum.png) · [pdf](figures/The_Measured_Neutrino_Spectrum.pdf) · `python3 The_Measured_Neutrino_Spectrum.py`
 
+**4. The modelled neutrino spectrum** — the complement of plot 3: the model
+curves alone, with nothing measured. On its own it is a reproduction of Fig. 1
+of arXiv:1910.11878. Plots 1, 3 and 4 share axes, limits, aspect ratio and label
+positions, so any pair of them can be laid side by side or flipped between.
+
+<img src="figures/The_Modelled_Neutrino_Spectrum.png" width="900">
+
+[png](figures/The_Modelled_Neutrino_Spectrum.png) · [pdf](figures/The_Modelled_Neutrino_Spectrum.pdf) · `python3 The_Modelled_Neutrino_Spectrum.py`
+
 ### What is in the plot
 
 **Model components** (solid/dashed curves and shaded bands) are the GUNS
@@ -162,6 +171,7 @@ are worth spelling out, all of them inherited from Fig. 1 of the GUNS paper:
 The_Neutrino_Spectrum.py           driver: model + measurements
 The_Multimessenger_Spectrum.py     driver: the above + cosmic rays
 The_Measured_Neutrino_Spectrum.py  driver: measurements only
+The_Modelled_Neutrino_Spectrum.py  driver: model curves only
 PlotFuncs.py                 the TheNuSpectrum class (axes, components, labels)
 guns.mplstyle                matplotlib style
 data/source/guns_tables/     ancillary tables of arXiv:1910.11878, unmodified
@@ -189,6 +199,7 @@ cd ..
 python3 The_Neutrino_Spectrum.py
 python3 The_Multimessenger_Spectrum.py
 python3 The_Measured_Neutrino_Spectrum.py
+python3 The_Modelled_Neutrino_Spectrum.py
 ```
 
 Requires `numpy`, `matplotlib` and a LaTeX installation (the style sets
