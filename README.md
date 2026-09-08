@@ -46,6 +46,8 @@ legend carries the year of each result):
 | Borexino | pp, ⁷Be, pep, CNO fluxes | Nature **562** (2018) 505; Phys. Rev. D **108** (2023) 102005 |
 | SNO | ⁸B total (NC) flux | Phys. Rev. C **88** (2013) 025501 |
 | KamLAND | U+Th geoneutrino flux | Geophys. Res. Lett. **49** (2022) e2022GL099566 |
+| Super-Kamiokande | atmospheric ν_e (circles) and ν_μ (squares) spectra, 0.16–10⁴ GeV | Phys. Rev. D **94** (2016) 052001 |
+| IceCube | atmospheric ν_μ spectrum (triangles), 100 GeV–400 TeV | Phys. Rev. D **83** (2011) 012001 |
 | IceCube | diffuse astrophysical flux (combined fit, MESE), Glashow resonance | [2026 data release](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ZBO52I); [2021 Glashow release](https://icecube.wisc.edu/data-releases/2021/03/icecube-data-for-the-first-glashow-resonance-candidate/) |
 | KM3NeT | KM3-230213A ultra-high-energy event | Nature **638** (2025) 376 |
 
@@ -78,7 +80,15 @@ are worth spelling out, all of them inherited from Fig. 1 of the GUNS paper:
    geoneutrino flux is *not* treated this way — the GUNS geoneutrino curve
    includes ⁴⁰K, which lies below the inverse-beta-decay threshold and is
    invisible to KamLAND — so it is shown as a single integral-flux marker.
-4. **The dotted diagonals** mark how many neutrinos above a given energy cross
+4. **The atmospheric points need one caveat.** The GUNS atmospheric curve is a
+   *production* flux and carries no oscillations, while Super-K and IceCube
+   measure the flux arriving at a detector. Below ~10 GeV the Super-K ν_μ points
+   therefore fall under the curve, because ν_μ → ν_τ oscillations have removed
+   part of the flux; the ν_e points are much less affected. Above ~100 GeV
+   oscillations are irrelevant, and what remains — the model sitting some
+   30–50% above the IceCube unfolding — is the genuine difference between the
+   Honda-based calculation and the measurement.
+5. **The dotted diagonals** mark how many neutrinos above a given energy cross
    unit area per unit time. For a spectrum falling as E^-γ,
    N(>E) = E·Φ(E)/(γ−1), so a fixed rate is a straight line of slope −1 on these
    axes. They are drawn for γ = 2, i.e. simply N(>E) = E·Φ(E); for any other
@@ -99,6 +109,7 @@ data/output/                 plot-ready tables (regenerate with the scripts belo
 data/convert_guns_tables.py            GUNS tables      -> data/output
 data/convert_neutrino_telescopes.py    IceCube, KM3NeT  -> data/output
 data/convert_low_energy_experiments.py Borexino, SNO, KamLAND -> data/output
+data/convert_atmospheric_experiments.py Super-K, IceCube atmospheric -> data/output
 figures/                     the rendered plot
 ```
 
@@ -109,6 +120,7 @@ cd data
 python3 convert_guns_tables.py
 python3 convert_neutrino_telescopes.py
 python3 convert_low_energy_experiments.py
+python3 convert_atmospheric_experiments.py
 cd ..
 python3 The_Neutrino_Spectrum.py
 ```

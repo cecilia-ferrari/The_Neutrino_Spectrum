@@ -77,7 +77,8 @@ class TheNuSpectrum:
         'Borexino': '2018--2023',
         'SNO': '2013',
         'KamLAND': '2022',
-        'IceCube': '2021--2026',
+        'Super-K': '2016',
+        'IceCube': '2011--2026',
         'KM3NeT': '2025',
     }
 
@@ -86,6 +87,7 @@ class TheNuSpectrum:
         'Borexino': '#F5A400',
         'SNO': '#00A651',
         'KamLAND': '#FF3DBE',
+        'Super-K': '#D62728',
         'IceCube': '#8A2BE2',
         'KM3NeT': '#141E3C',
     }
@@ -278,6 +280,15 @@ class TheNuSpectrum:
         self.plot_measured_lines(ax, 'Measured_integrals.txt', self.experiments['KamLAND'],
                                  self.SOLAR_LINE_DISPLAY_SCALE, zorder=16, marker='D')
 
+        # Atmospheric spectra: Super-K measures nu_e (circles) and nu_mu
+        # (squares); the IceCube unfolding (triangles) is nu_mu only.
+        self.plot_points(ax, 'SuperK_atm_nue_points.txt',
+                         self.experiments['Super-K'], zorder=16, marker='o')
+        self.plot_points(ax, 'SuperK_atm_numu_points.txt',
+                         self.experiments['Super-K'], zorder=16, marker='s')
+        self.plot_points(ax, 'IceCube_atm_numu_points.txt',
+                         self.experiments['IceCube'], zorder=16, marker='^')
+
         self.plot_points(ax, 'IceCube_combinedfit_points.txt',
                          self.experiments['IceCube'], zorder=17)
         self.plot_points(ax, 'IceCube_mese_points.txt',
@@ -301,7 +312,7 @@ class TheNuSpectrum:
         (r'$^8$B', 3.0e7, 3.0e-1, 'solar_nuclear', 18),
         (r'hep', 4.5e7, 3.0e-4, 'solar_nuclear', 18),
         (r'DSNB', 1.1e8, 5.0e-6, 'DSNB', 18),
-        (r'Atmospheric', 3.0e11, 3.0e-14, 'atmospheric', 18),
+        (r'Atmospheric', 2.0e9, 5.0e-9, 'atmospheric', 18),
         (r'Astrophysical', 5.0e13, 3.0e-21, 'astrophysical', 18),
         (r'Cosmogenic', 2.5e17, 3.0e-29, 'cosmogenic', 18),
     ]

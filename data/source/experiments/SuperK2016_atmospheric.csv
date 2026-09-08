@@ -1,0 +1,34 @@
+# Super-Kamiokande I-IV atmospheric neutrino flux, Table 4 of
+#   K. Abe et al. (Super-Kamiokande Coll.), Phys. Rev. D 94 (2016) 052001
+#   [arXiv:1510.08127] -- "Measurements of the atmospheric neutrino flux by
+#   Super-Kamiokande: energy spectra, geomagnetic effects, and solar modulation"
+#
+# E2phi is Ebar_i^2 * Phi_i in GeV cm^-2 s^-1 sr^-1, per flavour, summed over
+# neutrinos and antineutrinos (Super-K cannot separate them).
+# err is the total (statistical + systematic) uncertainty in percent, symmetric.
+# log10E_ref is the mean energy quoted by the collaboration for each bin.
+#
+# flavour,log10E_lo,log10E_hi,log10E_ref,E2phi,err_lo_pct,err_up_pct
+nue,-0.8,-0.6,-0.71,1.21e-2,18,18
+nue,-0.6,-0.4,-0.51,1.46e-2,17,17
+nue,-0.4,-0.2,-0.27,1.50e-2,16,16
+nue,-0.2,0.0,-0.09,1.37e-2,15,15
+nue,0.0,0.2,0.10,1.16e-2,17,17
+nue,0.2,0.4,0.30,8.55e-3,17,17
+nue,0.4,0.6,0.50,6.09e-3,18,18
+nue,0.6,0.8,0.70,3.73e-3,19,19
+nue,0.8,1.0,0.90,2.32e-3,18,18
+nue,1.0,1.5,1.22,9.42e-4,15,15
+nue,1.5,2.0,1.72,2.03e-4,18,18
+numu,-0.6,-0.4,-0.51,1.58e-2,21,21
+numu,-0.4,-0.2,-0.32,1.77e-2,16,16
+numu,-0.2,0.0,-0.09,1.86e-2,15,15
+numu,0.0,0.2,0.10,1.68e-2,16,16
+numu,0.2,0.4,0.30,1.38e-2,18,18
+numu,0.4,0.6,0.51,9.59e-3,19,19
+numu,0.6,0.8,0.71,6.68e-3,19,19
+numu,0.8,1.0,0.90,4.79e-3,17,17
+numu,1.0,1.5,1.21,2.62e-3,13,13
+numu,1.5,2.0,1.73,1.20e-3,16,16
+numu,2.0,3.0,2.40,2.49e-4,18,18
+numu,3.0,4.0,3.39,1.46e-5,21,21
