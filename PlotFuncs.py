@@ -134,7 +134,7 @@ class TheNuSpectrum:
     # entry: (marker, label) pairs, drawn left to right.
     experiment_markers = {
         'Super-K': [('o', r'$\nu_e$'), ('s', r'$\nu_\mu$'), ('v', r'DSNB')],
-        'IceCube': [('^', r'atm.'), ('o', r'astro.')],
+        'IceCube': [('^', r'atm.'), ('o', r'astro.'), ('v', r'limits')],
     }
 
     # Cosmetic truncation of the curves that end on a sharp kinematic edge: the
@@ -488,7 +488,7 @@ class TheNuSpectrum:
         r'$N(>E) = E\,\Phi(E)$ for an $E^{-2}$ spectrum',
         r'PandaX-4T, XENONnT and LZ measure the \emph{total} $^8$B flux via '
         r'CE$\nu$NS; their points are spread in energy only for legibility',
-        r'Super-K DSNB: open triangles are 90\% C.L.\ upper limits '
+        r'Open down-triangles are upper limits. Super-K DSNB: 90\% C.L.\ '
         r'[arXiv:2511.02222]; the star is the \emph{preliminary} '
         r'2.6$\sigma$ indication shown at Neutrino 2026',
     ]
