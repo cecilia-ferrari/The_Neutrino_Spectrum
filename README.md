@@ -56,7 +56,7 @@ components, taken from the ancillary tables of arXiv:1910.11878:
 | Component | Source table | Notes |
 |---|---|---|
 | Cosmic neutrino background | `CNB.dat`, `CNB-lines.dat` | continuum + the ν₂, ν₃ mass-eigenstate lines |
-| BBN relics | `BBN-tritium.dat`, `BBN-neutron.dat` | ³H (solid) and neutron decay (dashed) |
+| BBN relics | `BBN-tritium.dat`, `BBN-neutron.dat` | ³H and neutron decay (lighter shade) — both ν̄ₑ |
 | Solar, thermal | `Sun-thermal.dat` | plasmon, photo-, bremsstrahlung neutrinos |
 | Solar, nuclear | `Sun-nuclear-*.dat`, `Sun-lines.dat` | pp, ⁸B, hep, ¹³N, ¹⁵O continua + ⁷Be, pep lines |
 | Geoneutrinos | `Geoneutrinos.dat` | ²³⁸U, ²³²Th and ⁴⁰K |
@@ -64,7 +64,7 @@ components, taken from the ancillary tables of arXiv:1910.11878:
 | DSNB | `DSNB.dat` | ν and ν̄ bands |
 | Atmospheric | `Atmospheric.dat` | ν (solid) and ν̄ (dashed) |
 | Astrophysical | `IceCube.dat` | IceCube 2017 diffuse band |
-| Cosmogenic | `Cosmogenic.dat` | He (solid) and Fe (dashed) primaries |
+| Cosmogenic | `Cosmogenic.dat` | He and Fe (lighter shade) primaries |
 
 **Measurements** (markers and filled bands, colour-coded per experiment; the
 legend carries the year of each result):
@@ -151,7 +151,14 @@ comparison of particle counts.
 The vertical axis is a *differential* flux in eV⁻¹ cm⁻² s⁻¹. Three conventions
 are worth spelling out, all of them inherited from Fig. 1 of the GUNS paper:
 
-1. **Monochromatic components** (⁷Be, pep, and the CνB mass eigenstates) are delta
+1. **A dashed line means an antineutrino, and nothing else.** Only the
+   atmospheric pair uses it: solid ν, dashed ν̄. The other two pairs drawn in one
+   colour are not particle/antiparticle splits — tritium versus free-neutron
+   decay (both ν̄ₑ, differing only in parent nucleus) and helium versus iron
+   cosmic-ray primaries — so they are separated by a **lighter shade** of the
+   same colour instead. Reusing the dash for those would have invited exactly
+   the wrong inference.
+2. **Monochromatic components** (⁷Be, pep, and the CνB mass eigenstates) are delta
    functions in energy, so what they carry is an **integral** flux in cm⁻² s⁻¹,
    not a differential one — a different unit from everything else on the axis.
    They are drawn as a stem topped by a marker, and the stem height is that
@@ -164,18 +171,18 @@ are worth spelling out, all of them inherited from Fig. 1 of the GUNS paper:
    lines are drawn unscaled. The tables in `data/output/` always hold the
    *physical* values; the display scale lives in `PlotFuncs.py`
    (`SOLAR_LINE_DISPLAY_SCALE`).
-2. **Species convention.** GUNS plots a single species: one flavour, neutrinos and
+3. **Species convention.** GUNS plots a single species: one flavour, neutrinos and
    antineutrinos separately. The IceCube and KM3NeT data releases instead quote a
    per-flavour, per-steradian ν+ν̄ flux, so `data/convert_neutrino_telescopes.py`
    multiplies by 4π and divides by 2.
-3. **Integral measurements on a differential axis.** Borexino and SNO quote
+4. **Integral measurements on a differential axis.** Borexino and SNO quote
    integrated rates. For pp, ⁸B and CNO the GUNS spectral shape is renormalised to
    the measured integral, giving the shaded bands; this is the usual "measured
    normalisation × Standard Solar Model shape" construction. The KamLAND
    geoneutrino flux is *not* treated this way — the GUNS geoneutrino curve
    includes ⁴⁰K, which lies below the inverse-beta-decay threshold and is
    invisible to KamLAND — so it is shown as a single integral-flux marker.
-4. **The atmospheric points need one caveat.** The GUNS atmospheric curve is a
+5. **The atmospheric points need one caveat.** The GUNS atmospheric curve is a
    *production* flux and carries no oscillations, while Super-K and IceCube
    measure the flux arriving at a detector. Below ~10 GeV the Super-K ν_μ points
    therefore fall under the curve, because ν_μ → ν_τ oscillations have removed
@@ -183,7 +190,7 @@ are worth spelling out, all of them inherited from Fig. 1 of the GUNS paper:
    oscillations are irrelevant, and what remains — the model sitting some
    30–50% above the IceCube unfolding — is the genuine difference between the
    Honda-based calculation and the measurement.
-5. **The dotted diagonals** mark how many neutrinos above a given energy cross
+6. **The dotted diagonals** mark how many neutrinos above a given energy cross
    unit area per unit time. For a spectrum falling as E^-γ,
    N(>E) = E·Φ(E)/(γ−1), so a fixed rate is a straight line of slope −1 on these
    axes. They are drawn for γ = 2, i.e. simply N(>E) = E·Φ(E); for any other

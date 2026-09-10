@@ -35,6 +35,19 @@ plt.style.use(BASE_DIR / 'guns.mplstyle')
 CREDIT_URL = 'github.com/cecilia-ferrari/The_Neutrino_Spectrum'
 
 
+def lighten(color, amount=0.45):
+    """Blend a colour toward white.
+
+    Where two sub-components share a colour, a lighter shade separates them
+    without overloading solid-versus-dashed.  On these figures a dashed line
+    means an antineutrino and nothing else, so the tritium/neutron and He/Fe
+    pairs -- which are not particle/antiparticle splits -- are distinguished
+    this way instead.
+    """
+    rgb = np.array(matplotlib.colors.to_rgb(color))
+    return tuple(rgb + amount * (1.0 - rgb))
+
+
 def MySaveFig(fig, pltname, pngsave=False):
     """Save a figure as pdf and, optionally, png."""
     if pngsave:
@@ -152,6 +165,10 @@ class TheNuSpectrum:
 
     def __init__(self, axes='guns'):
         self.datadir = DATA_OUTPUT_DIR
+        # lighter shades for the two pairs that are not a nu/nubar split
+        self.colors = dict(self.colors)
+        self.colors['BBN_light'] = lighten(self.colors['BBN'])
+        self.colors['cosmogenic_light'] = lighten(self.colors['cosmogenic'])
         self.axes_kind = axes
         if axes == 'multimessenger':
             self.E_MIN, self.E_MAX = self.MULTIMESSENGER_E_RANGE
@@ -279,9 +296,10 @@ class TheNuSpectrum:
                                  self.CNB_LINE_DISPLAY_SCALE, zorder=11)
 
     def bbn_neutrinos(self, ax):
-        c = self.colors['BBN']
-        self.plot_line(ax, 'BBN_tritium_flux.txt', c, zorder=9)
-        self.plot_line(ax, 'BBN_neutron_flux.txt', c, ls='--', zorder=9)
+        # both are nu_e-bar, so they share a linestyle and differ only in shade
+        self.plot_line(ax, 'BBN_tritium_flux.txt', self.colors['BBN'], zorder=9)
+        self.plot_line(ax, 'BBN_neutron_flux.txt', self.colors['BBN_light'],
+                       zorder=9)
 
     def solar_neutrinos(self, ax):
         thermal, nuclear = self.colors['solar_thermal'], self.colors['solar_nuclear']
@@ -312,9 +330,11 @@ class TheNuSpectrum:
                        zorder=6, alpha=0.5)
 
     def cosmogenic_neutrinos(self, ax):
-        c = self.colors['cosmogenic']
-        self.plot_line(ax, 'Cosmogenic_He_flux.txt', c, zorder=5)
-        self.plot_line(ax, 'Cosmogenic_Fe_flux.txt', c, ls='--', zorder=5)
+        # He and Fe primaries, not a nu/nubar split: shade, not linestyle
+        self.plot_line(ax, 'Cosmogenic_He_flux.txt', self.colors['cosmogenic'],
+                       zorder=5)
+        self.plot_line(ax, 'Cosmogenic_Fe_flux.txt',
+                       self.colors['cosmogenic_light'], zorder=5)
 
     def model(self, ax):
         """All the GUNS model components of arXiv:1910.11878."""
@@ -384,7 +404,7 @@ class TheNuSpectrum:
     # text, x [eV], y [flux], colour key, font size
     labels = [
         (r'C$\nu$B', 3.0e-4, 2.0e16, 'CNB', 20),
-        (r'$n$', 4.0e-5, 3.0e6, 'BBN', 18),
+        (r'$n$', 4.0e-5, 3.0e6, 'BBN_light', 18),
         (r'$^3$H', 4.0e-3, 2.0e-6, 'BBN', 18),
         (r'Solar (thermal)', 5.0e0, 3.0e4, 'solar_thermal', 18),
         (r'$pp$', 7.0e4, 1.5e7, 'solar_nuclear', 18),
